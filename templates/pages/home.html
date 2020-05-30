@@ -1,11 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>twitter</title>
-</head>
-<body>
-    <h1>Welcome to twitter</h1>
-</body>
-</html>
+{%extends 'base.html'%}
+{% block content %}
+<div id='tweets'>
+    Loading...
+</div>
+{% endblock content %}
+{% block js %}
+<script>
+const tweetsElement = document.getElementById("tweets") // get an html element
+// tweetsElement.innerHTML = 'Loading...' // set new html in that element
+// var el1 = "<h1>Hi there 1</h1>"
+// var el2 = "<h1>Hi there 2</h1>"
+// var el3 = "<h1>Hi there 3</h1>"
+// tweetsElement.innerHTML = el1 + el2 + el3
+
+const xhr = new XMLHttpRequest()
+const method = 'GET' // "POST"
+const url = "/tweets"
+const responseType = "json"
+function formatedTweets(tweet){
+    var currentItem = `<div class='mb-4 tweet' id='${tweet.id}'>  
+    <p>${tweet.content}</p></div>`;
+    return currentItem;
+}
+xhr.responseType = responseType
+xhr.open(method, url)
+xhr.onload = function() {
+    const serverResponse = xhr.response
+    const listedItems = serverResponse.response // array
+    var finalTweetStr = ""
+    var i;
+    for (i=0;i<listedItems.length; i++) {
+        var currentItem=formatedTweets(listedItems[i])
+        finalTweetStr += currentItem
+    }
+    tweetsElement.innerHTML = finalTweetStr
+    //console.log(finalTweetStr);
+    console.log(listedItems);
+}
+xhr.send()
+
+
+</script>
+{% endblock js %}
