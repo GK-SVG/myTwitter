@@ -53,7 +53,12 @@ this is amazing!!!!
             tweetsContainerElement.innerHTML = newTweetElement + ogHtml
             myForm.reset()
         }
-        
+        else if (xhr.status === 400) {
+            const errorJson = xhr.response
+            console.log(errorJson)
+        } else if (xhr.status === 500) {
+            alert("There was a server error, please try again.")
+        }
     }
     xhr.send(myFormData)
 }
